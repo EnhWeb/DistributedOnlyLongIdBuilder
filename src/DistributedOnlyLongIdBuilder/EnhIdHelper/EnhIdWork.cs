@@ -2,14 +2,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
-namespace EnhIdHelper
+namespace EnhEnhIdWork
 {
     /// <summary>
-     /// 动态生产有规律的ID
-     /// </summary>
-    public class Snowflake
+    /// 动态生产有规律的ID Snowflake算法是Twitter的工程师为实现递增而不重复的ID实现的
+    /// http://blog.csdn.net/w200221626/article/details/52064976     
+    /// C# 实现 Snowflake算法 
+    /// </summary>
+    public class EnhIdWork
     {
         private static long machineId;//机器ID
         private static long datacenterId = 0L;//数据ID
@@ -17,10 +20,10 @@ namespace EnhIdHelper
 
         private static long twepoch = 687888001020L; //唯一时间随机量
 
-        private static long machineIdBits = 5L; //机器码字节数
-        private static long datacenterIdBits = 5L;//数据字节数
+        private static long machineIdBits = 3L; //机器码字节数 ，（5位时为31，3位时为7）
+        private static long datacenterIdBits = 3L;//数据字节数 ，（5位时为31，3位时为7）
         public static long maxMachineId = -1L ^ -1L << (int)machineIdBits; //最大机器ID
-        private static long maxDatacenterId = -1L ^ (-1L << (int)datacenterIdBits);//最大数据ID
+        public static long maxDatacenterId = -1L ^ (-1L << (int)datacenterIdBits);//最大数据ID
 
         private static long sequenceBits = 12L; //计数器字节数，12个字节用来保存计数码        
         private static long machineIdShift = sequenceBits; //机器码数据左移位数，就是后面计数器占用的位数
@@ -30,26 +33,26 @@ namespace EnhIdHelper
         private static long lastTimestamp = -1L;//最后时间戳
 
         private static object syncRoot = new object();//加锁对象
-        static Snowflake snowflake;
-
-        public static Snowflake Instance()
+        static EnhIdWork snowflake;
+        
+        public static EnhIdWork Instance()
         {
             if (snowflake == null)
-                snowflake = new Snowflake();
+                snowflake = new EnhIdWork();
             return snowflake;
         }
 
-        public Snowflake()
+        public EnhIdWork()
         {
             Snowflakes(0L, -1);
         }
 
-        public Snowflake(long machineId)
+        public EnhIdWork(long machineId)
         {
             Snowflakes(machineId, -1);
         }
 
-        public Snowflake(long machineId, long datacenterId)
+        public EnhIdWork(long machineId, long datacenterId)
         {
             Snowflakes(machineId, datacenterId);
         }
@@ -62,7 +65,7 @@ namespace EnhIdHelper
                 {
                     throw new Exception("机器码ID非法");
                 }
-                Snowflake.machineId = machineId;
+                EnhIdWork.machineId = machineId;
             }
             if (datacenterId >= 0)
             {
@@ -70,7 +73,7 @@ namespace EnhIdHelper
                 {
                     throw new Exception("数据中心ID非法");
                 }
-                Snowflake.datacenterId = datacenterId;
+                EnhIdWork.datacenterId = datacenterId;
             }
         }
 
@@ -80,7 +83,8 @@ namespace EnhIdHelper
         /// <returns>毫秒</returns>
         private static long GetTimestamp()
         {
-            return (long)(DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalMilliseconds;
+            //让他2000年开始
+            return (long)(DateTime.UtcNow - new DateTime(2000, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalMilliseconds;
         }
 
         /// <summary>
@@ -91,8 +95,13 @@ namespace EnhIdHelper
         private static long GetNextTimestamp(long lastTimestamp)
         {
             long timestamp = GetTimestamp();
-            if (timestamp <= lastTimestamp)
+            int count = 0;
+            while (timestamp <= lastTimestamp)//这里获取新的时间,可能会有错,这算法与comb一样对机器时间的要求很严格
             {
+                count++;
+                if (count > 10)
+                    throw new Exception("机器的时间可能不对");
+                Thread.Sleep(1);
                 timestamp = GetTimestamp();
             }
             return timestamp;
@@ -107,13 +116,13 @@ namespace EnhIdHelper
             lock (syncRoot)
             {
                 long timestamp = GetTimestamp();
-                if (Snowflake.lastTimestamp == timestamp)
+                if (EnhIdWork.lastTimestamp == timestamp)
                 { //同一微妙中生成ID
                     sequence = (sequence + 1) & sequenceMask; //用&运算计算该微秒内产生的计数是否已经到达上限
                     if (sequence == 0)
                     {
                         //一微妙内产生的ID计数已达上限，等待下一微妙
-                        timestamp = GetNextTimestamp(Snowflake.lastTimestamp);
+                        timestamp = GetNextTimestamp(EnhIdWork.lastTimestamp);
                     }
                 }
                 else
@@ -125,7 +134,7 @@ namespace EnhIdHelper
                 {
                     throw new Exception("时间戳比上一次生成ID时时间戳还小，故异常");
                 }
-                Snowflake.lastTimestamp = timestamp; //把当前时间戳保存为最后生成ID的时间戳
+                EnhIdWork.lastTimestamp = timestamp; //把当前时间戳保存为最后生成ID的时间戳
                 long Id = ((timestamp - twepoch) << (int)timestampLeftShift)
                     | (datacenterId << (int)datacenterIdShift)
                     | (machineId << (int)machineIdShift)
@@ -133,5 +142,6 @@ namespace EnhIdHelper
                 return Id;
             }
         }
+
     }
 }
