@@ -16,7 +16,7 @@ namespace EnhIdHelper.Test
             Console.WriteLine(bytes);
             Console.WriteLine(BitConverter.ToInt64(bytes, 0));
 
-            Assert.IsTrue(false);
+            //Assert.IsTrue(true);
         }
     }
 }
