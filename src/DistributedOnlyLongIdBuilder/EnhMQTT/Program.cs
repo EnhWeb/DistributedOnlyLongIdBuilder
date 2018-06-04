@@ -27,7 +27,7 @@ namespace EnhMQTT
             var options = new MqttClientTcpOptions
             {
                // Port = 61613,
-                Server = "127.0.0.11",
+                Server = "127.0.0.1",
                 ClientId = "c001",
                 UserName = "u001",
                 Password = "p001",
