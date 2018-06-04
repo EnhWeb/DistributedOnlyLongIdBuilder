@@ -9,6 +9,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EnhIdHelper", "EnhIdHelper\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EnhIdHelper.Test", "EnhIdHelper.Test\EnhIdHelper.Test.csproj", "{9E943D94-BBEA-4017-B75F-9830D1DC5DEE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EnhMQTT", "EnhMQTT\EnhMQTT.csproj", "{A8E5055A-2D73-4DCB-9730-F096EC10DF4C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EnhMQTT.Test", "EnhMQTT.Test\EnhMQTT.Test.csproj", "{9A6A8D96-AFD8-40CC-8C2E-EC6883895155}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +31,14 @@ Global
 		{9E943D94-BBEA-4017-B75F-9830D1DC5DEE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9E943D94-BBEA-4017-B75F-9830D1DC5DEE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9E943D94-BBEA-4017-B75F-9830D1DC5DEE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A8E5055A-2D73-4DCB-9730-F096EC10DF4C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A8E5055A-2D73-4DCB-9730-F096EC10DF4C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A8E5055A-2D73-4DCB-9730-F096EC10DF4C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A8E5055A-2D73-4DCB-9730-F096EC10DF4C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9A6A8D96-AFD8-40CC-8C2E-EC6883895155}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9A6A8D96-AFD8-40CC-8C2E-EC6883895155}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9A6A8D96-AFD8-40CC-8C2E-EC6883895155}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9A6A8D96-AFD8-40CC-8C2E-EC6883895155}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
